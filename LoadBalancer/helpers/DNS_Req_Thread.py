@@ -1,6 +1,4 @@
 import threading
-from helpers.command_Parser import CmdParser
-
 
 class DNSReqThread(threading.Thread):
     def __init__(self, conn, requests, dict):

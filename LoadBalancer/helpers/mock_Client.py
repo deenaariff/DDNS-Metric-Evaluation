@@ -1,3 +1,4 @@
+import sys
 import socket
 import json
 
@@ -33,6 +34,6 @@ if __name__ == '__main__':
 
     for i in range(1,20):
         dict = {'id':i,'cmd':'set','var':'google.com','val':'123.223.323.423'}
-        s.send(json.dump(dict))
+        s.send(json.dumps(dict))
 
     s.close()
