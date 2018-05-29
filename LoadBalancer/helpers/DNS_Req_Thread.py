@@ -8,7 +8,6 @@ class DNSReqThread(threading.Thread):
     def __init__(self, requests):
         super(DNSReqThread,self).__init__()
         self.requests = requests
-        self.numServers = 0
         self.round = -1
 
     def run(self):
@@ -30,14 +29,14 @@ class DNSReqThread(threading.Thread):
                 request = self.requests.get()
                 obj = json.loads(request)
                 data = Utility.packData(obj)
-                
+
                 #print('obj = ')
                 #print(obj)
-                
+
                 #Load balancer algorithme
                 # if leader is True then send to leader
                 # if leader is False then send to node determined by round Robin
-                
+
                 if str(obj['leader']) == 'True':
                     leaderIP = str(config.getLeader())
                     conn = config.connDict[leaderIP]

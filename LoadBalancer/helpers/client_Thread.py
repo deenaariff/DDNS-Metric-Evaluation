@@ -1,7 +1,7 @@
 import threading
 import socket
 import config
-from helpers.response_Thread import ResThread
+from helpers.client_Res_Thread import ResThread
 from helpers.util import Utility
 
 
