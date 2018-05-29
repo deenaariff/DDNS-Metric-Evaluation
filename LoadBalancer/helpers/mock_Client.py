@@ -3,8 +3,8 @@ import socket
 import json
 import time
 import Queue
+from util import Utility
 
-from helpers.util import Utility
 def connectSock(HOST, PORT):
 
     # New Socket Object
@@ -26,7 +26,7 @@ def connectSock(HOST, PORT):
 if __name__ == '__main__':
     # Ensure Correct Number of Command Line Args
     if len(sys.argv) < 3:
-        raise Exception(um.NETWORK_ERR)
+        #raise Exception(um.NETWORK_ERR)
         exit(1)
 
     # Set HOST and PORT INFO
@@ -38,10 +38,13 @@ if __name__ == '__main__':
     for i in range(1,20):
         dict = {'id':i,'cmd':'set','var':'google.com','val':'123.223.323.423','leader':'True'}
         data = Utility.packData(dict)
+        time.sleep(0.2)
         s.send(data)
-
+    
+    index = 0
     while True:
         Utility.unpackData(s, response)
         while response.empty() == False :
+            print('this is the '+index+' response')
             print(response.get())
     s.close()

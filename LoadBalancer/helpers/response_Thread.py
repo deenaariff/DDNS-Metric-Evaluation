@@ -1,6 +1,7 @@
 import threading
 import time
 import config
+from util import Utility
 
 class ResThread(threading.Thread):
     def __init__(self, response):
@@ -12,13 +13,14 @@ class ResThread(threading.Thread):
             try:
                 
                 while(self.response.empty() == False):
-                    print('this is client response thread!')
-                    time.sleep(2)
+                    #print('this is client response thread!')
                     d = self.response.get()
-                    print(d)
-                    config.client.send(d)
-                    
-                    #self.conn.send(d)
+                    #print('d')
+                    #print(d)
+                    data = Utility.packData(d)
+                    time.sleep(0.2)
+                    config.client.send(data)
+
             except Exception as e:
                 print("response thread has error!" ,e)
                 break

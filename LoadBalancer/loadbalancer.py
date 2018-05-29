@@ -41,6 +41,7 @@ if __name__ == '__main__':
 
     requests    = Queue.Queue()
     response    = Queue.Queue()
+    
     clientThread    = ClientThread(sockClient, requests, response)
     DNSThread       = DNSThread(sockDNS, requests,response)
 

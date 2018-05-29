@@ -22,16 +22,8 @@ class ClientThread(threading.Thread):
                 config.client = conn
 
                 while True:
-                    Utility.unpackData(self.s, self.requests)
-                    # payload = conn.recv(100000)
-                    # cmds = []
-                    #
-                    # if not payload:
-                    #     print ("No data Exists")
-                    # else:
-                    #     print('this is the client thread!')
-                    #     #print(payload)
-                    #     self.requests.put(payload)
+                    Utility.unpackData(conn, self.requests)
+
             except socket.error as e:
                 print('client Thread ', e)
             except KeyboardInterrupt:
