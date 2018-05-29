@@ -1,6 +1,7 @@
 import threading
 import json
 import config
+from helpers.util import Utility
 
 class DNSReqThread(threading.Thread):
     def __init__(self, requests):
@@ -27,15 +28,16 @@ class DNSReqThread(threading.Thread):
         else:
             while self.requests.empty() == False:
                 request = self.requests.get()
+                data = Utility.packData(request)
                 obj = json.loads(request)
                 if str(obj['leader']) == 'True':
                     leaderIP = str(config.getLeader())
                     conn = config.connDict[leaderIP]
-                    conn.send(request)
+                    conn.send(data)
                 else:
                     self.round = self.roundRobin()
-                    config.connDict[config.ipList[self.round]].send(request)
-    
+                    config.connDict[config.ipList[self.round]].send(data)
+
     def roundRobin(self):
         if self.round == self.numServers - 1:
             return 0

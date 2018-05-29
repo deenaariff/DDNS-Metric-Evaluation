@@ -1,7 +1,9 @@
 import threading
 import json
 import config
+import Queue
 from helpers.DNS_Req_Thread import DNSReqThread
+from helpers.util import Utility
 
 
 
@@ -28,15 +30,19 @@ class DNSThread(threading.Thread):
                 print(conn, address)
                 config.numServers += 1
                 config.ipList.append(address)
-
+                response = Queue.Queue()
                 while True:
                     config.connDict[address[0]] = conn
-                    payload = config.connDict[address[0]].recv(100000)
-                    if not payload:
-                        continue
-                    else:
-                        print('this is dns thread!')
-                        self.parseResponse(payload)
+
+                    Utility.unpackData(self.s, response)
+
+                    # payload = self.s.recv(100000)
+                    # if not payload:
+                    #     continue
+                    # else:
+                    #     print('this is dns thread!')
+                    while response.empty() == False:
+                        self.parseResponse(response.get())
                         #print('current leader = '+config.getLeader())
                         #config.connDict[address[0]].send('set leader ok!')
             except KeyboardInterrupt:

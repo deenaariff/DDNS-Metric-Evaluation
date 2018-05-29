@@ -2,6 +2,7 @@ import threading
 import socket
 import config
 from helpers.response_Thread import ResThread
+from helpers.util import Utility
 
 
 class ClientThread(threading.Thread):
@@ -19,17 +20,18 @@ class ClientThread(threading.Thread):
                 # conn is a new socket object
                 conn, address = self.s.accept()
                 config.client = conn
-                
-                while True:
-                    payload = conn.recv(100000)
-                    cmds = []
 
-                    if not payload:
-                        print ("No data Exists")
-                    else:
-                        print('this is the client thread!')
-                        #print(payload)
-                        self.requests.put(payload)
+                while True:
+                    Utility.unpackData(self.s, self.requests)
+                    # payload = conn.recv(100000)
+                    # cmds = []
+                    #
+                    # if not payload:
+                    #     print ("No data Exists")
+                    # else:
+                    #     print('this is the client thread!')
+                    #     #print(payload)
+                    #     self.requests.put(payload)
             except socket.error as e:
                 print('client Thread ', e)
             except KeyboardInterrupt:

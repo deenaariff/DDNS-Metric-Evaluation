@@ -2,7 +2,9 @@ import sys
 import socket
 import json
 import time
+import Queue
 
+from helpers.util import Utility
 def connectSock(HOST, PORT):
 
     # New Socket Object
@@ -32,17 +34,14 @@ if __name__ == '__main__':
     PORT = int(sys.argv[2])
 
     s = connectSock(HOST, PORT)
-
+    response = Queue.Queue()
     for i in range(1,20):
         dict = {'id':i,'cmd':'set','var':'google.com','val':'123.223.323.423','leader':'True'}
-        time.sleep(1)
-        s.send(json.dumps(dict))
-    
+        data = Utility.packData(dict)
+        s.send(data)
+
     while True:
-        #time.sleep(3)
-        payload = s.recv(1024)
-        if not payload:
-            continue
-        else:
-            print(payload)
+        Utility.unpackData(s, response)
+        while response.empty() == False :
+            print(response.get())
     s.close()
