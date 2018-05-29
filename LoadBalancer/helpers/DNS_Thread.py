@@ -36,10 +36,9 @@ class DNSThread(threading.Thread):
                         continue
                     else:
                         print('this is dns thread!')
-                        print(payload)
                         self.parseResponse(payload)
-                        print('current leader = '+config.getLeader())
-                        config.connDict[address[0]].send('set leader ok!')
+                        #print('current leader = '+config.getLeader())
+                        #config.connDict[address[0]].send('set leader ok!')
             except KeyboardInterrupt:
                 conn.close()
                 break

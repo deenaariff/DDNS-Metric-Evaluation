@@ -48,5 +48,7 @@ if __name__ == '__main__':
             continue
         else:
             print(payload)
-    
+            request = json.loads(payload)
+            response = {'id':str(request['id']),'cmd':'set','var':str(request['var']),'val':str(request['id'])}
+            s.send(json.dumps(response))
     s.close()

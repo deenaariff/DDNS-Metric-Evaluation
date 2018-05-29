@@ -37,5 +37,12 @@ if __name__ == '__main__':
         dict = {'id':i,'cmd':'set','var':'google.com','val':'123.223.323.423','leader':'True'}
         time.sleep(1)
         s.send(json.dumps(dict))
-
+    
+    while True:
+        #time.sleep(3)
+        payload = s.recv(1024)
+        if not payload:
+            continue
+        else:
+            print(payload)
     s.close()
