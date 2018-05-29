@@ -1,9 +1,10 @@
 import threading
 import json
+import config.py
 from helpers.DNS_Req_Thread import DNSReqThread
 
 
-leader = ''
+
 dict = {}
 ipList = []
 numServers = 0
@@ -30,9 +31,9 @@ class DNSThread(threading.Thread):
                     print('this is dns thread!')
                     print(payload)
                     self.parseResponse(payload)
-                    
-                    if leader != '':
-                        requestThread = DNSReqThread(conn, self.requests)
+
+                    if getLeader() != '':
+                        requestThread = DNSReqThread(conn, self.requests, self.dict)
                         requestThread.start()
             except KeyboardInterrupt:
                 conn.close()
@@ -41,12 +42,11 @@ class DNSThread(threading.Thread):
             conn.close()
 
     def parseResponse(self,payload):
-        global leader
         response = json.loads(payload)
         if response['cmd'] == 'lock':
             print('the leader variable is locked')
         elif response['cmd'] == 'set':
             if response['var'] == 'leader':
-                leader = response['val']
+                setLeader(response['val'])
             else:
                 self.response.put(payload)

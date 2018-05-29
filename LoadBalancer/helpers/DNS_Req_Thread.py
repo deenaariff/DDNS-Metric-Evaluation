@@ -1,4 +1,5 @@
 import threading
+import config.py
 
 class DNSReqThread(threading.Thread):
     def __init__(self, conn, requests):
@@ -10,7 +11,7 @@ class DNSReqThread(threading.Thread):
     def run(self):
         while True:
             #global leader
-            #print('leader is '+ leader)
+            print('leader is '+ getLeader())
             #print('this is dns req thread!')
             while(self.requests.empty() == False):
                 print('this is in the req thread')
