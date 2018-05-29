@@ -1,14 +1,21 @@
 import threading
 
 class DNSReqThread(threading.Thread):
-    def __init__(self, conn, requests, dict):
-        self.resquests = requests
+    def __init__(self, conn, requests):
+        super(DNSReqThread,self).__init__()
+        self.requests = requests
         self.numServers = 0
         self.round = 0
 
     def run(self):
-        print('this is dns req thread!')
-        # self.sendRequests()
+        while True:
+            #global leader
+            #print('leader is '+ leader)
+            #print('this is dns req thread!')
+            while(self.requests.empty() == False):
+                print('this is in the req thread')
+                print(self.requests.get())
+                # self.sendRequests()
 
 
 

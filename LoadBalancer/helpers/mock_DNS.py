@@ -37,7 +37,13 @@ if __name__ == '__main__':
     s = connectSock(HOST, PORT)
     ip = getServerInfo()
 
-    dict = {'id':i,'cmd':'set','var':'leader','val':ip}
+    dict = {'id':1,'cmd':'set','var':'leader','val':ip}
     s.send(json.dumps(dict))
-
+    
+    while True:
+        payload = s.recv(100000)
+        if not payload:
+            continue
+        else:
+            print(payload)
     s.close()

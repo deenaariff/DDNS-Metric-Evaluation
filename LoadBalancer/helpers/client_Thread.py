@@ -17,17 +17,19 @@ class ClientThread(threading.Thread):
 
                 resThread = ResThread(conn, self.response)      # new thread for response
                 resThread.start()                          # thread start
+                while True:
+                    payload = conn.recv(100000)
+                    cmds = []
 
-                payload = conn.recv(100000)
-                cmds = []
-
-                if not payload:
-                    print ("No data Exists")
-                else:
-                    print('this is the client thread!')
-                    #print(payload)
-                    self.requests.put(payload)
-
+                    if not payload:
+                        print ("No data Exists")
+                        break
+                    else:
+                        print('this is the client thread!')
+                        #print(payload)
+                        self.requests.put(payload)
+            except socket.error as e:
+                print('client Thread ', e)
             except KeyboardInterrupt:
                 conn.close()
                 break

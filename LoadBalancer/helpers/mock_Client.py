@@ -1,6 +1,7 @@
 import sys
 import socket
 import json
+import time
 
 def connectSock(HOST, PORT):
 
@@ -34,6 +35,7 @@ if __name__ == '__main__':
 
     for i in range(1,20):
         dict = {'id':i,'cmd':'set','var':'google.com','val':'123.223.323.423'}
+        time.sleep(1)
         s.send(json.dumps(dict))
 
     s.close()
