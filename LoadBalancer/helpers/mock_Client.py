@@ -34,7 +34,7 @@ if __name__ == '__main__':
     s = connectSock(HOST, PORT)
 
     for i in range(1,20):
-        dict = {'id':i,'cmd':'set','var':'google.com','val':'123.223.323.423'}
+        dict = {'id':i,'cmd':'set','var':'google.com','val':'123.223.323.423','leader':'True'}
         time.sleep(1)
         s.send(json.dumps(dict))
 

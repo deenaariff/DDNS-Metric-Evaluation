@@ -1,6 +1,7 @@
 import sys
 import socket
 import json
+import time
 
 def connectSock(HOST, PORT):
 
@@ -41,9 +42,11 @@ if __name__ == '__main__':
     s.send(json.dumps(dict))
     
     while True:
+        time.sleep(1)
         payload = s.recv(100000)
         if not payload:
             continue
         else:
             print(payload)
+    
     s.close()

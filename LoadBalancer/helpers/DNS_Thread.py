@@ -1,6 +1,6 @@
 import threading
 import json
-import config.py
+import config
 from helpers.DNS_Req_Thread import DNSReqThread
 
 
@@ -15,26 +15,31 @@ class DNSThread(threading.Thread):
         self.requests = requests
         self.response = response
         self.s = DNSSock
-        self.leader = ''
 
     def run(self):
         # Listen for incoming clients and handle requests
+        # if config.getLeader() != '':
+        requestThread = DNSReqThread(self.requests)
+        requestThread.start()
         while True:
             try:
                 # conn is a new socket object
                 conn, address = self.s.accept()
-                payload = conn.recv(100000)
+                print(conn, address)
+                config.numServers += 1
+                config.ipList.append(address)
 
-                if not payload:
-                    print("No data Exists")
-                else:
-                    print('this is dns thread!')
-                    print(payload)
-                    self.parseResponse(payload)
-
-                    if getLeader() != '':
-                        requestThread = DNSReqThread(conn, self.requests, self.dict)
-                        requestThread.start()
+                while True:
+                    config.connDict[address[0]] = conn
+                    payload = config.connDict[address[0]].recv(100000)
+                    if not payload:
+                        continue
+                    else:
+                        print('this is dns thread!')
+                        print(payload)
+                        self.parseResponse(payload)
+                        print('current leader = '+config.getLeader())
+                        config.connDict[address[0]].send('set leader ok!')
             except KeyboardInterrupt:
                 conn.close()
                 break
@@ -47,6 +52,7 @@ class DNSThread(threading.Thread):
             print('the leader variable is locked')
         elif response['cmd'] == 'set':
             if response['var'] == 'leader':
-                setLeader(response['val'])
+                config.setLeader(response['val'])
+                print('set leader = '+config.getLeader())
             else:
                 self.response.put(payload)
