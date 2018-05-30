@@ -1,31 +1,40 @@
 import sys
 import socket
 import json
-import time
-import Queue
-from util import Utility
 
-def connectSock(HOST, PORT):
-
-    # New Socket Object
-    s = socket.socket()
-    try:
-    	# Connect to the host and port
-    	s.connect((HOST, PORT))
-        return s
-    # Handle any socket errors
-    except socket.error as err:
-    	print err
-    	exit(1)
-
-    except KeyboardInterrupt:
-    	s.close()
-    	exit(0)
 
 def getServerInfo():
     hostName = socket.getfqdn(socket.gethostname())
     IPAddr = socket.gethostbyname(hostName)
     return IPAddr
+
+def sendLeader(HOST, PORT):
+    try:
+        l = socket.socket()
+        l.connect((HOST, PORT))
+        dict = {'cmd':'leader','leader_IP': IP, 'leader_port':port}
+        data = json.dumps(dict)
+        l.send(data)
+    except socket.error as e:
+        print('send Leader', e)
+    finally:
+        l.close()
+
+# establish socket connection
+def connectSock(IPAddr):
+
+    s = socket.socket()
+    # get server host name
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    # Bind the Socket to localhost at a given port
+    try:
+        s.bind(('', 0))
+        s.listen(1)
+        print("Server is running on " + IPAddr)
+        print "Server Listening on Port: " + str(s.getsockname()[1])
+        return s
+    except socket.error as err:
+        print "Socket Connection Error %s" % err
 
 if __name__ == '__main__':
     # Ensure Correct Number of Command Line Args
@@ -36,28 +45,19 @@ if __name__ == '__main__':
     # Set HOST and PORT INFO
     HOST = sys.argv[1]
     PORT = int(sys.argv[2])
-    response = Queue.Queue()
 
-    s = connectSock(HOST, PORT)
-    ip = getServerInfo()
-    
-    # prepare for the data
-    dict = {'id':1,'cmd':'set','var':'leader','val':ip}
-    data = Utility.packData(dict)
+    IP = getServerInfo()
+    s = connectSock(IP)
+    sendLeader(HOST,PORT, IP, s.getsockname()[1])
 
-    s.send(data)
-    
     while True:
-        Utility.unpackData(s, response)
-        while response.empty() == False:
-            obj = response.get()
-            #print('this is mock_dns')
-            #print('obj')
-            #print(obj)
-            request = json.loads(obj)
-            # prepare the response
-            res= {'id':str(request['id']),'cmd':'set','var':str(request['var']),'val':str(request['id'])}
-            d = Utility.packData(res)
-            time.sleep(0.2)
-            s.send(d)
-    s.close()
+        try:
+            request = s.recv(1024)
+            req = json.loads(request)
+            response = {'id':req['id'],'val':'129.210.16.80'}
+            res = json.dumps(response)
+            s.send(res)
+        except socket.error as e:
+            print('leader send response',e)
+        finally:
+            s.close()

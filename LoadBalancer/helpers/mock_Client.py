@@ -34,18 +34,10 @@ if __name__ == '__main__':
     PORT = int(sys.argv[2])
 
     s = connectSock(HOST, PORT)
-    response = Queue.Queue()
+
     for i in range(1,20):
-        dict = {'id':i,'cmd':'set','var':'google.com','val':'123.223.323.423','leader':'True'}
-        data = Utility.packData(dict)
-        time.sleep(0.2)
-        s.send(data)
-    
-    index = 0
-    while True:
-        Utility.unpackData(s, response)
-        while response.empty() == False :
-            print('this is the '+str(index)+' response')
-            print(response.get())
-            index += 1
-    s.close()
+        dict = {'id':i,'cmd':'get','var':'google.com','leader':'True'}
+        s.send(dict)
+        response = s.recv(1024)
+        s.close()
+        print(response)

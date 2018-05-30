@@ -1,6 +1,6 @@
 import struct
 import json
-
+import config
 class Utility():
     @staticmethod
     def packData(data):

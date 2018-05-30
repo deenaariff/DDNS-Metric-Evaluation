@@ -1,10 +1,6 @@
 import socket
-import threading
-import Queue
-from helpers.DNS_Thread import DNSThread
-
-# one thread is used to connect with client
-# anther thread is used to connect with the DNS cluster
+import helpers.parse_helper
+import helpers.config
 
 # get the IPAddr of the Server
 def getServerInfo():
@@ -21,6 +17,7 @@ def connectSock(IPAddr, name):
     # Bind the Socket to localhost at a given port
     try:
         s.bind(('', 0))
+        s.listen(10)
         print("Server for "+ name +" is running on " + IPAddr)
         print "Server Listening on Port: " + str(s.getsockname()[1])
         return s
@@ -28,24 +25,31 @@ def connectSock(IPAddr, name):
         print "Socket Connection Error %s" % err
 
 
+def startServer(s):
+    while True:
+        try:
+            # conn is a new socket object
+            conn, address = s.accept()
+
+            payload = s.recv(1024)
+            if not payload:
+                print('dosen\'t have any payload here')
+            else:
+                config.client = conn
+                parse_helper.parsePayload(payload)
+
+        except socket.error as e:
+            print('loadbalancer socket error', e)
+            conn.close()
+            break
+        except KeyboardInterrupt:
+            conn.close()
+            break
+
+        conn.close()
+
 
 if __name__ == '__main__':
     IPAddr      = getServerInfo()
-    sockClient  = connectSock(IPAddr, 'client')
-    print('')
-    sockDNS     = connectSock(IPAddr, 'DNS servers')
-
-
-
-
-    sockClient.listen(1)
-    sockDNS.listen(10)
-
-    requests    = Queue.Queue()
-    response    = Queue.Queue()
-
-    clientThread    = ClientThread(sockClient, requests, response)
-    DNSThread       = DNSThread(sockDNS, requests,response)
-
-    clientThread.start()
-    DNSThread.start()
+    socket      = connectSock(IPAddr, 'Server')
+    startServer(socket)
