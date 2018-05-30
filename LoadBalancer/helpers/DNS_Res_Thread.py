@@ -5,16 +5,16 @@ import config
 from util import Utility
 
 class DNSResThread(threading.Thread):
-    def __init__(self, conn, response):
+    def __init__(self, ip, response):
         super(DNSResThread, self).__init__()
         self.response = response
-        self.conn = conn
+        self.ip = ip
 
     def run(self):
         resQueue = Queue.Queue()
-        #a = self.conn.recv(1024)
         while True:
-            #Utility.unpackData(self.conn, resQueue)
+            conn = config.connDict[address[0]]
+            Utility.unpackData(conn, resQueue)
 
             while resQueue.empty() == False:
                 self.parseResponse(resQueue.get())

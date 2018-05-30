@@ -4,6 +4,7 @@ import config
 import Queue
 from helpers.DNS_Req_Thread import DNSReqThread
 from helpers.DNS_Res_Thread import DNSResThread
+from socketserver import BaseRequestHandler,ThreadingTCPServer
 from helpers.util import Utility
 
 class DNSThread(threading.Thread):
@@ -29,7 +30,7 @@ class DNSThread(threading.Thread):
                 config.ipList.append(address)
                 #
                 # This Thread is used to get response from different server
-                responseThread = DNSResThread(conn, self.response)
+                responseThread = DNSResThread(address[0], self.response)
                 responseThread.start()
 
                 # while True:

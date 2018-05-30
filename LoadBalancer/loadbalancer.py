@@ -2,7 +2,6 @@ import socket
 import threading
 import Queue
 from helpers.DNS_Thread import DNSThread
-from helpers.client_Thread import ClientThread
 
 # one thread is used to connect with client
 # anther thread is used to connect with the DNS cluster
@@ -33,15 +32,18 @@ def connectSock(IPAddr, name):
 if __name__ == '__main__':
     IPAddr      = getServerInfo()
     sockClient  = connectSock(IPAddr, 'client')
-    print()
+    print('')
     sockDNS     = connectSock(IPAddr, 'DNS servers')
-    
+
+
+
+
     sockClient.listen(1)
     sockDNS.listen(10)
 
     requests    = Queue.Queue()
     response    = Queue.Queue()
-    
+
     clientThread    = ClientThread(sockClient, requests, response)
     DNSThread       = DNSThread(sockDNS, requests,response)
 
