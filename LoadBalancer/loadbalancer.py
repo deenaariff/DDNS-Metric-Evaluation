@@ -1,6 +1,6 @@
 import socket
-import helpers.parse_helper
-import helpers.config
+from helpers import parse_helper
+from helpers import config
 
 # get the IPAddr of the Server
 def getServerInfo():
@@ -31,22 +31,22 @@ def startServer(s):
             # conn is a new socket object
             conn, address = s.accept()
 
-            payload = s.recv(1024)
+            payload = conn.recv(1024)
             if not payload:
                 print('dosen\'t have any payload here')
             else:
                 config.client = conn
                 parse_helper.parsePayload(payload)
-
-        except socket.error as e:
+                conn.close()
+        except Exception as e:
             print('loadbalancer socket error', e)
             conn.close()
             break
         except KeyboardInterrupt:
             conn.close()
             break
-
-        conn.close()
+    conn.close()
+    s.close()
 
 
 if __name__ == '__main__':

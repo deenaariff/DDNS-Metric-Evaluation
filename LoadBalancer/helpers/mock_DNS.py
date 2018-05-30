@@ -8,7 +8,7 @@ def getServerInfo():
     IPAddr = socket.gethostbyname(hostName)
     return IPAddr
 
-def sendLeader(HOST, PORT):
+def sendLeader(HOST, PORT, IP, port):
     try:
         l = socket.socket()
         l.connect((HOST, PORT))
@@ -52,12 +52,12 @@ if __name__ == '__main__':
 
     while True:
         try:
-            request = s.recv(1024)
+            conn, addr = s.accept()
+            request = conn.recv(1024)
             req = json.loads(request)
             response = {'id':req['id'],'val':'129.210.16.80'}
             res = json.dumps(response)
-            s.send(res)
+            conn.send(res)
         except socket.error as e:
             print('leader send response',e)
-        finally:
-            s.close()
+

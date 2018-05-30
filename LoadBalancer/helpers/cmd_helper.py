@@ -5,7 +5,7 @@ import json
 def setNewDNS(request):
     if config.leader != None:
         s = socket.socket()
-        s.connect(config.leader[0], config.leader[1])
+        s.connect((config.leader[0], config.leader[1]))
         s.send(request)
         response = s.recv(1024)
 
@@ -26,8 +26,8 @@ def getIPAddr(request):
     try:
         req = json.loads(request)
         s = socket.socket()
-        if req['leader'] == True
-            s.connect(config.leader[0], config.leader[1])
+        if req['leader'] == 'True':
+            s.connect((config.leader[0], config.leader[1]))
         else:
             index = load_balancer.roundRobin()
             s.connect(config.ipList[index][0], config.ipList[index][1])
@@ -38,9 +38,8 @@ def getIPAddr(request):
             print('there is no response from cluster for get')
             return False
         else:
+            print(response)
             config.client.send(response)
-            s.close()
-            config.client.close()
             return True
     except Exception as e:
         print('get IPAddr ',e)
@@ -52,6 +51,7 @@ def setNewLeader(request):
         leaderIP = req['leader_IP']
         leaderPort = req['leader_port']
         config.leader = (leaderIP, leaderPort)
+        print(leaderIP, leaderPort)
         return True
     except Exception as e:
         print('set new Leader',e)
