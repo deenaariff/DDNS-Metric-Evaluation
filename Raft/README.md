@@ -1,36 +1,75 @@
-simpleRaft
-==========
-[![Build Status](https://travis-ci.org/streed/simpleRaft.png?branch=master)](https://travis-ci.org/streed/simpleRaft)
+# raftos
 
-What?
-=====
-A implementation of Raft in pure Python. 
+[![Build Status](https://travis-ci.org/zhebrak/raftos.svg)](https://travis-ci.org/zhebrak/raftos) [![PyPI version](https://badge.fury.io/py/raftos.svg)](http://badge.fury.io/py/raftos)
 
-Why?
-====
-After reading a few papers on the Raft algorithm I figured I would implement it and use it for projects of mine that require the 
-consistency that Raft provides to ensure their correctness.
+Asynchronous replication framework based on [Raft Algorithm](https://raft.github.io/) for fault-tolerant distributed systems.
 
-Details
-=======
+![](https://raw.github.com/zhebrak/raftos/master/docs/img/raft_rsm.png)
 
-This implementation tries to stay as pure Python as possible to ensure that as few dependencies are required to run this outside of the code in this repo.
-I am also striving to have it run on Python 2.6+ as well to make it as flexible as possible. 
+#### Install
 
-The system is designed in two parts. There are a system of state classes that define the functionality required for the specific states that a node can
-go through during the running of Raft, these include:
+```
+pip install raftos
+```
 
-* Follower
-* Candidate
-* Leader
+#### Register nodes on every server
 
-Each one has their roles defined in their class files. Along with these state classes there are defined messages that will be used to keep the 
-message format well defined and abstracted from the wire format as much as possible. 
+```python
+import raftos
 
-The final part is the communication layer. The current communication layer will use Gossiping using randomized subgroups at the moment, but it will
-be written in such a way so as to be easy to implement and plug in a different communicationl layer at a later time.
 
-References:
-==========
-* [In Search of an Understandable Consensus Algorithm](https://ramcloud.stanford.edu/wiki/download/attachments/11370504/raft.pdf)
-* [Raft Lecture](http://www.youtube.com/watch?v=YbZ3zDzDnrw)
+loop.create_task(
+    raftos.register(
+        # node running on this machine
+        '127.0.0.1:8000',
+
+        # other servers
+        cluster=[
+            '127.0.0.1:8001',
+            '127.0.0.1:8002'
+        ]
+    )
+)
+loop.run_forever()
+```
+
+#### Data replication
+
+```python
+counter = raftos.Replicated(name='counter')
+data = raftos.ReplicatedDict(name='data')
+
+
+# value on a leader gets replicated to all followers
+await counter.set(42)
+await data.update({
+    'id': 337,
+    'data': {
+        'amount': 20000,
+        'created_at': '7/11/16 18:45'
+    }
+})
+```
+
+#### In case you only need consensus algorithm with leader election
+
+```python
+await raftos.wait_until_leader(current_node)
+```
+or
+```python
+if raftos.get_leader() == current_node:
+    # make request or respond to a client
+```
+or
+```python
+raftos.configure({
+    'on_leader': start,
+    'on_follower': stop
+})
+```
+
+Whenever the leader falls, someone takes its place.
+
+
+[Paper](https://raft.github.io/raft.pdf) & [Video](https://www.youtube.com/watch?v=YbZ3zDzDnrw)
