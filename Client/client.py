@@ -1,4 +1,22 @@
+'''
+
+	Author: Vishnu Narayana (file and skeleton code created by Deen Arriff)
+	Date: 5/26
+	
+	This is the main file to run the client-side of the project.
+	First, the client calls commandParser to load the test set to use and store it as a list.
+	Next, the client calls each command in sequential order. The client will wait for responses.
+	Then, the client will record the result by passing it into metric_evaluation.py
+	Finally, once all commands are made and responses received, the final metrics will be logged.
+	
+	
+'''
+
+
+import sys
 import socket
+import helpers.command_parser
+import helpers.metric_evaluation
 
 # Ensure Correct Number of Command Line Args
 if len(sys.argv) < 3:
@@ -9,32 +27,39 @@ if len(sys.argv) < 3:
 HOST = sys.argv[1]
 PORT = int(sys.argv[2])
 
-# Get User for Client From Environment Variable
-user = raw_input("Provide Your User Name: ")
-
+commandFile = raw_input('Please input the command file you would like to parse and run:')
+parser = CommandParser(commandFile)
+commands = parser.concatCommandsIntoJSON()
+metrics = MetricEvaluator(commands.getCommandList())
 
 run_client = True  # Run Client in Loop Until User Quits
 
-while run_client:
 
-    # New Socket Object
-    s = socket.socket()
+# New Socket Object
+s = socket.socket()
 
-    try:
+try:
+	# Connect to the host and port
+	s.connect((HOST, PORT))
 
-        # Connect to the host and port
-        s.connect((HOST, PORT))
+# Handle any socket errors
+except socket.error as err:
+	print err
+	exit(1)
 
-    # Handle any socket errors
-    except socket.error as err:
+except KeyboardInterrupt:
+	s.close()
+	exit(0)
 
-        print um.SOCKET_ERROR
-        print err
-        exit(1)
+#Attempt to send commands
+s.send(commands)
 
-    except KeyboardInterrupt:
-        s.close()
-        exit(0)
-
-    # Close the socket connection
-    s.close()
+#Receive responses from load balancer until it sends the finished signal
+while True:
+	response = s.recv(1024)
+	if response == 'end':
+		break
+	metrics.recordResponse(response)
+	
+# Close the socket connection
+s.close()
