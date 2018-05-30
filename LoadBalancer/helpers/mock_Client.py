@@ -45,6 +45,7 @@ if __name__ == '__main__':
     while True:
         Utility.unpackData(s, response)
         while response.empty() == False :
-            print('this is the '+index+' response')
+            print('this is the '+str(index)+' response')
             print(response.get())
+            index += 1
     s.close()

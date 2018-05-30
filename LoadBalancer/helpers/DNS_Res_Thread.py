@@ -1,16 +1,20 @@
+import Queue
+import threading
+import json
+import config
 from util import Utility
 
 class DNSResThread(threading.Thread):
     def __init__(self, conn, response):
-        super(DNSREsThread, self).__init__()
+        super(DNSResThread, self).__init__()
         self.response = response
         self.conn = conn
-        pass
 
     def run(self):
         resQueue = Queue.Queue()
+        #a = self.conn.recv(1024)
         while True:
-            Utility.unpackData(self.conn, resQueue)
+            #Utility.unpackData(self.conn, resQueue)
 
             while resQueue.empty() == False:
                 self.parseResponse(resQueue.get())
