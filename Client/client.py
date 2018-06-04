@@ -51,6 +51,20 @@ except KeyboardInterrupt:
 	s.close()
 	exit(0)
 
+for query in parser.getCommandList():
+	s.send(query)
+	if query['cmd'] == 'set':
+		response = s.recv(1024)
+		metrics.recordResponse(response)
+		response = s.recv(1024)
+		metrics.recordResponse(response)
+	else:
+		response = s.recv(1024)
+		metrics.recordResponse(response)
+
+s.close()
+
+'''
 #Attempt to send commands
 s.send(commands)
 
@@ -63,3 +77,4 @@ while True:
 	
 # Close the socket connection
 s.close()
+'''

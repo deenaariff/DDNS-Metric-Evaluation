@@ -22,7 +22,7 @@ class MetricEvaluator:
 		
 	def recordResponse(self, response):
 		correct = response['val'] == self.commandList[response['id']] #Calculate whether the response was correct or not
-		responseList = self.immediateResponses if response['immediate'] else self.postConfirmationResponses #Check which list to store the response in
+		responseList = self.immediateResponses if response['preConfirmation'] else self.postConfirmationResponses #Check which list to store the response in
 		responseList[response['id']] = (correct, response, time.time()) #Store the result as a tuple of the accuracy, the response itself, and the time returned
 	
 	def dumpLogs(self):

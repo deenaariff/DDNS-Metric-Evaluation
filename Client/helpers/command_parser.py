@@ -42,10 +42,10 @@ class CommandParser:
 		#Differentiate between set and get, and set up the initial dictionary
 		if cmds[0] == 'set':
 			leaderCommand = 3
-			parsedCommand = {'var': cmds[1], 'val': cmds[2], 'id': len(self.cmdList), 'leader': True}
+			parsedCommand = {'cmd': 'set', 'var': cmds[1], 'val': cmds[2], 'id': len(self.cmdList), 'leader': True}
 		elif cmds[0] == 'get':
 			leaderCommand = 2
-			parsedCommand = {'var': cmds[1], 'id': len(self.cmdList), 'leader': True}
+			parsedCommand = {'cmd': 'get', 'var': cmds[1], 'id': len(self.cmdList), 'leader': True}
 		else:
 			raise ValueError('Improperly formatted command type in text. Must be "get" or "set":\n'+line)
 		
