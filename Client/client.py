@@ -15,12 +15,12 @@
 
 import sys
 import socket
-import helpers.command_parser
-import helpers.metric_evaluation
+from helpers.command_parser import CommandParser
+from helpers.metric_evaluation import MetricEvaluator
 
 # Ensure Correct Number of Command Line Args
-if len(sys.argv) < 3:
-    raise Exception(um.NETWORK_ERR)
+if len(sys.argv) != 3:
+    raise Exception('Not enough arguments. 2 required')
     exit(1)
 
 # Set HOST and PORT INFO
@@ -29,8 +29,8 @@ PORT = int(sys.argv[2])
 
 commandFile = raw_input('Please input the command file you would like to parse and run:')
 parser = CommandParser(commandFile)
-commands = parser.concatCommandsIntoJSON()
-metrics = MetricEvaluator(commands.getCommandList())
+#commands = parser.concatCommandsIntoJSON()
+metrics = MetricEvaluator(parser.getCommandList())
 
 run_client = True  # Run Client in Loop Until User Quits
 
