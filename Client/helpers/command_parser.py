@@ -27,6 +27,8 @@ class CommandParser:
 	
 	def __init__(self, file):
 		self.cmdList = []
+		self.cmdIdSet = 0
+		self.cmdIdGet = 0
 		cmdFile = open(file)
 		for line in cmdFile:
 			self._parseLine(line)
@@ -42,10 +44,12 @@ class CommandParser:
 		#Differentiate between set and get, and set up the initial dictionary
 		if cmds[0] == 'set':
 			leaderCommand = 3
-			parsedCommand = {'var': cmds[1], 'val': cmds[2], 'id': len(self.cmdList), 'leader': True}
+			parsedCommand = {'cmd': 'set', 'var': cmds[1], 'val': cmds[2], 'id': self.cmdIdSet, 'leader': True}
+			self.cmdIdSet += 1
 		elif cmds[0] == 'get':
 			leaderCommand = 2
-			parsedCommand = {'var': cmds[1], 'id': len(self.cmdList), 'leader': True}
+			parsedCommand = {'cmd': 'get', 'var': cmds[1], 'id': self.cmdIdGet, 'leader': True}
+			self.cmdIdGet += 1
 		else:
 			raise ValueError('Improperly formatted command type in text. Must be "get" or "set":\n'+line)
 		
@@ -72,7 +76,9 @@ class CommandParser:
 
 
 '''Testing Code: Do not run this file in final product'''
-#parser = CommandParser('commands.txt')
-#print parser.concatCommandsIntoJSON()
-#for item in parser.getCommandList():
-#	print item
+'''
+parser = CommandParser('commands.txt')
+print parser.concatCommandsIntoJSON()
+for item in parser.getCommandList():
+	print item
+'''
