@@ -74,6 +74,10 @@ class UpdatedMetricEvaluator:
 		print "Accuracy of immediate responses: "+str(1.0*numCorrect/numItems)
 		print "Number of responses: "+str(numItems)+" vs expected responses: "+str(len(_list))
 		print "\n\n"
+		
+		for item in _list:
+			print item
+		
 		return (numCorrect, 1.0*numCorrect/numItems)
 
 class MetricEvaluator:
