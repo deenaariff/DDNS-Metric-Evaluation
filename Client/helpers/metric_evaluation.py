@@ -45,7 +45,7 @@ class UpdatedMetricEvaluator:
 	
 	def recordResponse(self, response):
 		#Check if response is correct
-		resp = response['val'];
+		resp = response['val']
 		respId = response['id']
 		respIdInt = int(respId)
 		expectedVal = self.expectedValues[respIdInt]
