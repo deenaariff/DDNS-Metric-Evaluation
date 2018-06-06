@@ -1,1 +1,1 @@
-x-terminal-emulator -e echo "hello 1!"
+xterm -e echo 1

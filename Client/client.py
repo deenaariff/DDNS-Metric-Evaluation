@@ -99,7 +99,7 @@ def connectAndSendCommand(query, expectResponse):
 
 print "attempting to send commands as json"
 for query in parser.getCommandList():
-	connectAndSendCommand(json.dumps(query, query['cmd']=='get'))
+	connectAndSendCommand(json.dumps(query), query['cmd']=='get')
 
 metrics.dumpLogs()
 
