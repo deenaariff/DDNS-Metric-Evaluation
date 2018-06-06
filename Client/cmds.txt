@@ -1,0 +1,9 @@
+set var1 val1 t
+set var2 val2 True
+set var1 val3 true
+set var1 val3 false
+set var1 val3 F
+
+get var1 true
+get var2 f
+get var3 False

@@ -16,7 +16,7 @@
 import sys
 import socket
 from helpers.command_parser import CommandParser
-from helpers.metric_evaluation import MetricEvaluator
+from helpers.metric_evaluation import UpdatedMetricEvaluator
 
 # Ensure Correct Number of Command Line Args
 if len(sys.argv) != 3:
@@ -30,7 +30,7 @@ PORT = int(sys.argv[2])
 commandFile = raw_input('Please input the command file you would like to parse and run:')
 parser = CommandParser(commandFile)
 #commands = parser.concatCommandsIntoJSON()
-metrics = MetricEvaluator(parser.getCommandList())
+metrics = UpdatedMetricEvaluator(parser.getCommandList())
 
 run_client = True  # Run Client in Loop Until User Quits
 
@@ -53,12 +53,7 @@ except KeyboardInterrupt:
 
 for query in parser.getCommandList():
 	s.send(query)
-	if query['cmd'] == 'set':
-		response = s.recv(1024)
-		metrics.recordResponse(response)
-		response = s.recv(1024)
-		metrics.recordResponse(response)
-	else:
+	if query['cmd'] == 'get':
 		response = s.recv(1024)
 		metrics.recordResponse(response)
 

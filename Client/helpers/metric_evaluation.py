@@ -13,10 +13,62 @@
 
 import time
 
+'''
+	New metric evaluator for changed formats and expected variables.
+	Set responses no longer get a response from the load balancer
+	Get responses reply with {valid, id, var, val}
+		valid: boolean on whether the variable exists on the system yet
+		id: id of the get response
+		var: variable being queried
+		val: value of the variable from the query
+'''
+class UpdatedMetricEvaluator:
+	
+	def __init__(self, commandList):
+		self.commandList = commandList;
+		#Create empty list for responses, length = # of get queries in commandList
+		self.responseList = [None]*(len([item for item in commandList if item['cmd']=='get']))
+		
+		#Calculate expected value for each get query
+		self.expectedValues = []
+		valTable = {}
+		for query in commandList:
+			if query['cmd'] == 'set':
+				valTable[query['var']]  = query['val']
+			elif query['cmd'] == 'get':
+				myval = valTable[query['var']] if query['var'] in valTable else None
+				self.expectedValues.append(myval)
+		
+		#Sanity check to see if # get commands == # matching values in expectedValues
+		if len(self.expectedValues) != len(self.responseList):
+			raise Exception('Number of get queries != length of expectedValues list. Error by client')
+	
+	def recordResponse(self, response):
+		#Check if response is correct
+		correct = response['val'] == self.expectedValues[response['id']]
+		self.responseList[response['id']] = (correct, time.time(), response)
+	
+	def dumpLogs(self):
+		calcAccuracy(self.responseList)
+	
+	def calcAccuracy(self, list):
+		numCorrect = 0
+		numItems = 0
+		for item in list:
+			if item == None:
+				continue
+			if item[0] == True:
+				numCorrect += 1
+			numItems += 1
+		print "Accuracy of immediate responses: "+(1.0*numCorrect/numItems)
+		print "Number of responses: "+numItems+" vs expected responses: "+len(self.immediateResponses)
+		print "\n\n"
+		return (numCorrect, 1.0*numCorrect/numItems)
+
 class MetricEvaluator:
 	
 	def __init__(self, commandList):
-		self.commandList = commandList 								#Store the command list to reference expected value changes
+		self.commandList = commandList 							#Store the command list to reference expected value changes
 		numSetCommands = len([item for item in commandList if item['cmd'] == set])
 		self.immediateResponses = [None]*numSetCommands			#For queries made immediately after the store command is sent
 		self.postConfirmationResponses = [None]*numSetCommands	#For queries made after the store command returns a response

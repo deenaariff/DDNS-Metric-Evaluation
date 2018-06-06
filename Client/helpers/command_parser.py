@@ -9,7 +9,6 @@
 			set- the literal string "set"
 			variable- the variable whose value to set
 			value- the value to set it to
-			leader- whether to query the leader only, or a random node
 		
 		Getting a value: "get variable leader"
 			get- the literal string "get"
@@ -44,7 +43,7 @@ class CommandParser:
 		#Differentiate between set and get, and set up the initial dictionary
 		if cmds[0] == 'set':
 			leaderCommand = 3
-			parsedCommand = {'cmd': 'set', 'var': cmds[1], 'val': cmds[2], 'id': self.cmdIdSet, 'leader': True}
+			parsedCommand = {'cmd': 'set', 'var': cmds[1], 'val': cmds[2], 'id': self.cmdIdSet}
 			self.cmdIdSet += 1
 		elif cmds[0] == 'get':
 			leaderCommand = 2
