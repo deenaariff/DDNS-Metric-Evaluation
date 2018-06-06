@@ -38,6 +38,7 @@ def startServer(s):
                 print('payload in loadbalancer :', payload)
                 config.client = conn
                 parse_helper.parsePayload(payload)
+                print('cmds done closing')
                 conn.close()
         except Exception as e:
             print('loadbalancer socket error', e)

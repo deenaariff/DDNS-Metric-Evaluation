@@ -14,6 +14,8 @@ def parsePayload(payload):
         elif cmd == 'leader':
             print('this is the new leader')
             result = cmd_helper.setNewLeader(payload)
+            print('result'+result)
+            print('finish new leader')
         elif cmd == 'node':
             print('this is a new node')
             result = cmd_helper.addNode(payload)
