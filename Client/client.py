@@ -34,9 +34,11 @@ metrics = UpdatedMetricEvaluator(parser.getCommandList())
 
 run_client = True  # Run Client in Loop Until User Quits
 
+print "loaded command file"
 
 # New Socket Object
 s = socket.socket()
+print "created socket object"
 '''
 try:
 	# Connect to the host and port
@@ -63,20 +65,27 @@ s.close()
 def connectAndSendCommand(query):
 	try:
 		# Connect to the host and port
+		print "attempting to connect to ", HOST, ":", PORT
 		s.connect((HOST, PORT))
+		print "sending query"
 		s.send(query)
+		print "sent query"
 
 	# Handle any socket errors
 	except socket.error as err:
+		print "socket error!"
 		print err
 		exit(1)
 
 	except KeyboardInterrupt:
+		print "keyboard interrupt!"
 		s.close()
 		exit(0)
 	
+	print "completed sending query, closing connection"
 	s.close()
 
+print "attempting to send commands as json"
 for query in parser.getCommandList():
 	connectAndSendCommand(json.dumps(query))
 	
