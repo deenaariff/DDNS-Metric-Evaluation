@@ -44,6 +44,9 @@ class UpdatedMetricEvaluator:
 			raise Exception('Number of get queries != length of expectedValues list. Error by client')
 	
 	def recordResponse(self, response):
+		#check if response is valid
+		if response['valid'] == False:
+			return
 		#Check if response is correct
 		resp = response['val']
 		respId = response['id']
