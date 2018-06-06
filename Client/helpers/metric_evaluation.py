@@ -49,7 +49,7 @@ class UpdatedMetricEvaluator:
 		self.responseList[response['id']] = (correct, time.time(), response)
 	
 	def dumpLogs(self):
-		calcAccuracy(self.responseList)
+		self.calcAccuracy(self.responseList)
 	
 	def calcAccuracy(self, list):
 		numCorrect = 0
