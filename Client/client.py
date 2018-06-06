@@ -81,7 +81,10 @@ def connectAndSendCommand(query, expectResponse):
 		print "sent query"
 		if expectResponse:
 			response = s.recv(1024)
-			metrics.recordResponse(json.loads(response))
+			print "response received: "
+			print response
+			if response:
+				metrics.recordResponse(json.loads(response))
 
 	# Handle any socket errors
 	except socket.error as err:
