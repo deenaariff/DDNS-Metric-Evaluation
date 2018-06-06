@@ -65,9 +65,9 @@ for query in parser.getCommandList():
 
 def connectAndSendCommand(query):
 	try:
-	# Connect to the host and port
-	s.connect((HOST, PORT))
-	s.send(query)
+		# Connect to the host and port
+		s.connect((HOST, PORT))
+		s.send(query)
 
 	# Handle any socket errors
 	except socket.error as err:
