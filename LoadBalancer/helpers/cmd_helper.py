@@ -9,7 +9,8 @@ def setNewDNS(request):
         s = socket.socket()
         s.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
         s.connect((config.leader[0], config.leader[1]))
-        s.send(request+"\n")
+        print('SENDING DNS SET TO RAFT')
+        s.send(request+'\n')
         response = s.recv(1024)
 
         if not response:
@@ -28,22 +29,27 @@ def setNewDNS(request):
 
 def getIPAddr(request,algorithm):
     try:
+        response = None
         req = json.loads(request)
         s = socket.socket()
         if req['leader'] == 'True':
+            print('sending to leader = ',config.leader)
             s.connect((config.leader[0], config.leader[1]))
         else:
             index = algorithm.roundRobin()
-            print(index,config.ipList)
+            print('sending to the '+str(index) +'machine =', config.ipList[index])
             s.connect((config.ipList[index][0], config.ipList[index][1]))
+            print("Sending new Get Request to RAFT")
             s.send(request+'\n')
             response = s.recv(1024)
+            print('response ' ,response)
 
         if not response:
             print('there is no response from cluster for get')
             return False
         else:
             print(response)
+            print('SENDING THE RESPONSE BACK TO THE CLIENT')
             config.client.send(response)
             return True
     except Exception as e:
@@ -58,9 +64,9 @@ def setNewLeader(request):
         electionTime = req['election_time']
         if electionTime > config.electionTime:
             config.leader = (leaderIP, leaderPort)
+            print(config.leader)
             print('here is a new leader'+ str(leaderIP), leaderPort)
             config.electionTime = electionTime
-        print('aaaaa')
         return True
     except Exception as e:
         print('set new Leader',e)

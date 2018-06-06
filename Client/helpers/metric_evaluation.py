@@ -59,10 +59,10 @@ class UpdatedMetricEvaluator:
 	def dumpLogs(self):
 		self.calcAccuracy(self.responseList)
 	
-	def calcAccuracy(self, list):
+	def calcAccuracy(self, _list):
 		numCorrect = 0
 		numItems = 0
-		for item in list:
+		for item in _list:
 			if item == None:
 				continue
 			if item[0] == True:
@@ -72,7 +72,7 @@ class UpdatedMetricEvaluator:
 			print "No valid responses back!"
 			return (0, 0)
 		print "Accuracy of immediate responses: "+str(1.0*numCorrect/numItems)
-		print "Number of responses: "+numItems+" vs expected responses: "+str(len(self.immediateResponses))
+		print "Number of responses: "+str(numItems)+" vs expected responses: "+str(len(_list))
 		print "\n\n"
 		return (numCorrect, 1.0*numCorrect/numItems)
 

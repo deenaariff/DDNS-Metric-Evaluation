@@ -1,7 +1,7 @@
 import socket
 from helpers import parse_helper
 from helpers import config
-
+from helpers.load_balancer import Algorithm
 # get the IPAddr of the Server
 def getServerInfo():
     hostName = socket.getfqdn(socket.gethostname())
