@@ -38,8 +38,7 @@ run_client = True  # Run Client in Loop Until User Quits
 print "loaded command file"
 
 # New Socket Object
-s = socket.socket()
-print "created socket object"
+
 '''
 try:
 	# Connect to the host and port
@@ -65,6 +64,8 @@ s.close()
 
 def connectAndSendCommand(query):
 	try:
+		s = socket.socket()
+		print "created socket object"
 		# Connect to the host and port
 		print "attempting to connect to ", HOST, ":", PORT
 		s.connect((HOST, PORT))
