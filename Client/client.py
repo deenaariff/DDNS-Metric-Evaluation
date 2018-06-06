@@ -60,9 +60,6 @@ for query in parser.getCommandList():
 s.close()
 '''
 
-for query in parser.getCommandList():
-	connectAndSendCommand(json.dumps(query))
-
 def connectAndSendCommand(query):
 	try:
 		# Connect to the host and port
@@ -80,6 +77,9 @@ def connectAndSendCommand(query):
 	
 	s.close()
 
+for query in parser.getCommandList():
+	connectAndSendCommand(json.dumps(query))
+	
 '''
 #Attempt to send commands
 s.send(commands)
