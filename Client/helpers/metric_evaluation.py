@@ -70,8 +70,9 @@ class UpdatedMetricEvaluator:
 			numItems += 1
 		if numItems == 0:
 			print "No valid responses back!"
-		print "Accuracy of immediate responses: "+(1.0*numCorrect/numItems)
-		print "Number of responses: "+numItems+" vs expected responses: "+len(self.immediateResponses)
+			return (0, 0)
+		print "Accuracy of immediate responses: "+str(1.0*numCorrect/numItems)
+		print "Number of responses: "+numItems+" vs expected responses: "+str(len(self.immediateResponses))
 		print "\n\n"
 		return (numCorrect, 1.0*numCorrect/numItems)
 
