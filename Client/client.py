@@ -19,6 +19,7 @@ import json
 from helpers.command_parser import CommandParser
 from helpers.metric_evaluation import UpdatedMetricEvaluator
 
+'''
 # Ensure Correct Number of Command Line Args
 if len(sys.argv) != 3:
     raise Exception('Not enough arguments. 2 required')
@@ -27,8 +28,13 @@ if len(sys.argv) != 3:
 # Set HOST and PORT INFO
 HOST = sys.argv[1]
 PORT = int(sys.argv[2])
+'''
 
-commandFile = raw_input('Please input the command file you would like to parse and run:')
+HOST = localhost
+PORT = 5000
+
+commandFile = 'cmds.txt'#raw_input('Please input the command file you would like to parse and run:')
+
 parser = CommandParser(commandFile)
 #commands = parser.concatCommandsIntoJSON()
 metrics = UpdatedMetricEvaluator(parser.getCommandList())
