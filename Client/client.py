@@ -69,6 +69,7 @@ s.close()
 '''
 
 def connectAndSendCommand(query):
+	s = socket.socket()
 	try:
 		s = socket.socket()
 		print "created socket object"
