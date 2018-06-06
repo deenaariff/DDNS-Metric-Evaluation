@@ -15,7 +15,7 @@ def setNewDNS(request):
             return False
         else:
             print('response for set cmd:',response)
-            config.client.send(response)
+            #config.client.send(response)
             s.close()
             config.client.close()
             return True
@@ -53,8 +53,11 @@ def setNewLeader(request):
         req = json.loads(request)
         leaderIP = req['leader_IP']
         leaderPort = req['leader_port']
+        #electionTime = req['electionTime']
+        #if electionTime > config.electionTime:
         config.leader = (leaderIP, leaderPort)
-        print(leaderIP, leaderPort)
+        print('here is a new leader'+ str(leaderIP), leaderPort)
+        #config.electionTime = electionTime
         return True
     except Exception as e:
         print('set new Leader',e)
