@@ -26,6 +26,7 @@ def connectSock(IPAddr, name):
 
 
 def startServer(s):
+    algo = Algorithm()
     while True:
         try:
             # conn is a new socket object
@@ -37,7 +38,7 @@ def startServer(s):
             else:
                 print('payload in loadbalancer :', payload)
                 config.client = conn
-                parse_helper.parsePayload(payload)
+                parse_helper.parsePayload(payload, algo)
                 print('cmds done closing')
                 conn.close()
         except Exception as e:

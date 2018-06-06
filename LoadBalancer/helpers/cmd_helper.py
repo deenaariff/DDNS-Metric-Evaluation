@@ -2,6 +2,8 @@ import config
 import socket
 import load_balancer
 import json
+from load_balancer import Algorithm
+
 def setNewDNS(request):
     if config.leader != None:
         s = socket.socket()
@@ -24,18 +26,18 @@ def setNewDNS(request):
         print('There is no leader now')
         return False
 
-def getIPAddr(request):
+def getIPAddr(request,algorithm):
     try:
         req = json.loads(request)
         s = socket.socket()
         if req['leader'] == 'True':
             s.connect((config.leader[0], config.leader[1]))
         else:
-            index = load_balancer.roundRobin()
-            #print(config.ipList)
+            index = algorithm.roundRobin()
+            print(index,config.ipList)
             s.connect((config.ipList[index][0], config.ipList[index][1]))
-        s.send(request+'\n')
-        response = s.recv(1024)
+            s.send(request+'\n')
+            response = s.recv(1024)
 
         if not response:
             print('there is no response from cluster for get')
@@ -58,6 +60,7 @@ def setNewLeader(request):
             config.leader = (leaderIP, leaderPort)
             print('here is a new leader'+ str(leaderIP), leaderPort)
             config.electionTime = electionTime
+        print('aaaaa')
         return True
     except Exception as e:
         print('set new Leader',e)

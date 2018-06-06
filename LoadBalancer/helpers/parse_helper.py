@@ -1,7 +1,7 @@
 import json
 import time
 import cmd_helper
-def parsePayload(payload):
+def parsePayload(payload,algorithm):
     try:
         message = json.loads(payload)
         cmd = message['cmd']
@@ -10,7 +10,7 @@ def parsePayload(payload):
             result = cmd_helper.setNewDNS(payload)
         elif cmd == 'get':
             print('get the IP address')
-            result = cmd_helper.getIPAddr(payload)
+            result = cmd_helper.getIPAddr(payload,algorithm)
         elif cmd == 'leader':
             print('this is the new leader')
             result = cmd_helper.setNewLeader(payload)

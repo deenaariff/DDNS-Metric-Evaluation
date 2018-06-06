@@ -1,7 +1,13 @@
 import config
-def roundRobin():
-    config.round += 1
-    if config.round == config.numServers - 1:
-        return 0
-    else:
-        return config.round
+
+class Algorithm:
+
+    def __init__(self):
+        self.index = config.round
+
+    def roundRobin(self):
+        _tmp = self.index
+        self.index = (_tmp+1) % (config.numServers) 
+        print('_tmp = '+str(_tmp))
+        print('numServer='+str(config.numServers))
+        return _tmp
