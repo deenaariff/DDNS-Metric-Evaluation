@@ -30,7 +30,7 @@ HOST = sys.argv[1]
 PORT = int(sys.argv[2])
 '''
 
-HOST = localhost
+HOST = 'localhost'
 PORT = 5000
 
 commandFile = 'cmds.txt'#raw_input('Please input the command file you would like to parse and run:')
