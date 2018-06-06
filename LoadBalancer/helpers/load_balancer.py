@@ -1,3 +1,4 @@
+import config
 def roundRobin():
     config.round += 1
     if config.round == config.numServers - 1:

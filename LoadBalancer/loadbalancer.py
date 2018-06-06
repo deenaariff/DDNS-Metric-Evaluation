@@ -16,7 +16,7 @@ def connectSock(IPAddr, name):
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     # Bind the Socket to localhost at a given port
     try:
-        s.bind(('', 0))
+        s.bind(("127.0.0.1", 5000))
         s.listen(10)
         print("Server for "+ name +" is running on " + IPAddr)
         print "Server Listening on Port: " + str(s.getsockname()[1])
@@ -35,6 +35,7 @@ def startServer(s):
             if not payload:
                 print('dosen\'t have any payload here')
             else:
+                print('payload in loadbalancer :', payload)
                 config.client = conn
                 parse_helper.parsePayload(payload)
                 conn.close()

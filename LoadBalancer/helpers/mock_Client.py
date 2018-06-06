@@ -33,13 +33,33 @@ if __name__ == '__main__':
     HOST = sys.argv[1]
     PORT = int(sys.argv[2])
 
+    setDict = {'id':'1','cmd':'set','var':'google.com','val':'129.210.16.90'}
+    data = json.dumps(setDict)
+    
+    s = connectSock(HOST,PORT)
+    s.send(data)
+    res = s.recv(1024)
+    print('message receive for set:',res)
+    s.close()
+    
     
 
-    for i in range(1,20):
-        dict = {'id':i,'cmd':'get','var':'google.com','leader':'True'}
-        data = json.dumps(dict)
-        s = connectSock(HOST, PORT)
-        s.send(data)
-        response = s.recv(1024)
-        s.close()
-        print(response)
+    
+
+    #for i in range(1,20):
+    dict = {'id':'2','cmd':'get','var':'google.com','leader':'True'}
+    data = json.dumps(dict)
+    s = connectSock(HOST, PORT)
+    s.send(data)
+    response = s.recv(1024)
+    s.close()
+    print(response)
+
+    
+    dict = {'id':'3','cmd':'get','var':'google.com','leader':'False'}
+    data = json.dumps(dict)
+    s = connectSock(HOST,PORT)
+    s.send(data)
+    res = s.recv(1024)
+    s.close()
+    print(res)
