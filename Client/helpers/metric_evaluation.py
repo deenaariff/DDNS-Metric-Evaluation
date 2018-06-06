@@ -45,13 +45,14 @@ class UpdatedMetricEvaluator:
 	
 	def recordResponse(self, response):
 		#check if response is valid
-		if response['valid'] == False:
-			return
+		
 		#Check if response is correct
-		resp = response['val']
 		respId = response['id']
 		respIdInt = int(respId)
 		expectedVal = self.expectedValues[respIdInt]
+		resp = None
+		if response['valid']:
+			resp = response['val']
 		correct = resp == expectedVal
 		self.responseList[response['id']] = (correct, time.time(), response)
 	
@@ -67,6 +68,8 @@ class UpdatedMetricEvaluator:
 			if item[0] == True:
 				numCorrect += 1
 			numItems += 1
+		if numItems == 0:
+			print "No valid responses back!"
 		print "Accuracy of immediate responses: "+(1.0*numCorrect/numItems)
 		print "Number of responses: "+numItems+" vs expected responses: "+len(self.immediateResponses)
 		print "\n\n"
