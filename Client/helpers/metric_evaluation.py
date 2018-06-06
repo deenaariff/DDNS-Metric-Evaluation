@@ -54,7 +54,7 @@ class UpdatedMetricEvaluator:
 		if response['valid']:
 			resp = response['val']
 		correct = resp == expectedVal
-		self.responseList[response['id']] = (correct, time.time(), response)
+		self.responseList[respIdInt] = (correct, time.time(), response)
 	
 	def dumpLogs(self):
 		self.calcAccuracy(self.responseList)
