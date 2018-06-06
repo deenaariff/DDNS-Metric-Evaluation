@@ -45,7 +45,11 @@ class UpdatedMetricEvaluator:
 	
 	def recordResponse(self, response):
 		#Check if response is correct
-		correct = response['val'] == self.expectedValues[int(response['id'])]
+		resp = response['val'];
+		respId = response['id']
+		respIdInt = int(respId)
+		expectedVal = self.expectedValues[respIdInt]
+		correct = resp == expectedVal
 		self.responseList[response['id']] = (correct, time.time(), response)
 	
 	def dumpLogs(self):
