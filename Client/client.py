@@ -89,7 +89,7 @@ def connectAndSendCommand(query):
 
 print "attempting to send commands as json"
 for query in parser.getCommandList():
-	connectAndSendCommand(json.dumps(query))
+	connectAndSendCommand(json.dumps(query)+'\n')
 	
 '''
 #Attempt to send commands
