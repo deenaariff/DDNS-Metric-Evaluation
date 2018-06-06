@@ -68,7 +68,7 @@ for query in parser.getCommandList():
 s.close()
 '''
 
-def connectAndSendCommand(query):
+def connectAndSendCommand(query, expectResponse):
 	s = socket.socket()
 	try:
 		s = socket.socket()
@@ -79,6 +79,9 @@ def connectAndSendCommand(query):
 		print "sending query"
 		s.send(query)
 		print "sent query"
+		if expectResponse:
+			response = s.recv(1024)
+			metrics.recordResponse(response)
 
 	# Handle any socket errors
 	except socket.error as err:
@@ -96,7 +99,7 @@ def connectAndSendCommand(query):
 
 print "attempting to send commands as json"
 for query in parser.getCommandList():
-	connectAndSendCommand(json.dumps(query))
+	connectAndSendCommand(json.dumps(query, query['cmd']=='get'))
 
 metrics.dumpLogs()
 

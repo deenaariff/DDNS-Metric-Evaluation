@@ -1,1 +1,1 @@
-gnome-terminal -e echo "hello 1!"
+x-terminal-emulator -e echo "hello 1!"
