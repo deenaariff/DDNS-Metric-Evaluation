@@ -32,8 +32,8 @@ PORT = int(sys.argv[2])
 
 HOST = 'localhost'
 PORT = 5000
-
 commandFile = 'cmds.txt'#raw_input('Please input the command file you would like to parse and run:')
+WAIT_TIME = 100.0 #wait time between sends in ms
 
 parser = CommandParser(commandFile)
 #commands = parser.concatCommandsIntoJSON()
@@ -103,6 +103,7 @@ def connectAndSendCommand(query, expectResponse):
 print "attempting to send commands as json"
 for query in parser.getCommandList():
 	connectAndSendCommand(json.dumps(query), query['cmd']=='get')
+	time.sleep(WAIT_TIME/1000.0)
 
 metrics.dumpLogs()
 
