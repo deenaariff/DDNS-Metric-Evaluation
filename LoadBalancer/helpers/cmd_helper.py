@@ -40,9 +40,9 @@ def getIPAddr(request,algorithm):
             print('sending to the '+str(index) +'machine =', config.ipList[index])
             s.connect((config.ipList[index][0], config.ipList[index][1]))
             print("Sending new Get Request to RAFT")
-            s.send(request+'\n')
-            response = s.recv(1024)
-            print('response ' ,response)
+        s.send(request+'\n')
+        response = s.recv(1024)
+        print('response ' ,response)
 
         if not response:
             print('there is no response from cluster for get')

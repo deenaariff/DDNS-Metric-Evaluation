@@ -34,7 +34,7 @@ PORT = int(sys.argv[2])
 HOST = 'localhost'
 PORT = 5000
 commandFile = 'cmds.txt'#raw_input('Please input the command file you would like to parse and run:')
-WAIT_TIME = 100.0 #wait time between sends in ms
+WAIT_TIME = 500.0 #wait time between sends in ms
 
 parser = CommandParser(commandFile)
 #commands = parser.concatCommandsIntoJSON()

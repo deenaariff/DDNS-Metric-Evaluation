@@ -22,6 +22,12 @@
 
 import json
 
+#Loads commands from a json file
+class CommandLoader:
+	
+	def __init__(self, _file):
+		
+
 class CommandParser:
 	
 	def __init__(self, file):
@@ -49,6 +55,11 @@ class CommandParser:
 			leaderCommand = 2
 			parsedCommand = {'cmd': 'get', 'var': cmds[1], 'id': str(self.cmdIdGet), 'leader': "True"}
 			self.cmdIdGet += 1
+		elif cmds[0] == 'delay':
+			parsedCommand = {'delay': cmds[1]}
+			self.cmdList.append(parsedCommand)
+			return
+			
 		else:
 			raise ValueError('Improperly formatted command type in text. Must be "get" or "set":\n'+line)
 		
@@ -62,6 +73,9 @@ class CommandParser:
 			parsedCommand['leader'] = "False"
 		else: #Confirm if the value is actually false, and not just bad formatting
 			raise ValueError('Improperly formatted boolean value in text:\n'+line)
+		
+		#Add any other misc. fields to parsedCommand
+		parsedCommand['msgid'] = len(self.cmdList)
 		
 		#Add parsed command list of command
 		self.cmdList.append(parsedCommand)
