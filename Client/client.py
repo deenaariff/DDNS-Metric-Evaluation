@@ -37,7 +37,7 @@ run_client = True  # Run Client in Loop Until User Quits
 
 # New Socket Object
 s = socket.socket()
-
+'''
 try:
 	# Connect to the host and port
 	s.connect((HOST, PORT))
@@ -52,12 +52,33 @@ except KeyboardInterrupt:
 	exit(0)
 
 for query in parser.getCommandList():
-	s.send(query)
+	s.send(json.dumps(query))
 	if query['cmd'] == 'get':
 		response = s.recv(1024)
 		metrics.recordResponse(response)
 
 s.close()
+'''
+
+for query in parser.getCommandList():
+	connectAndSendCommand(json.dumps(query))
+
+def connectAndSendCommand(query):
+	try:
+	# Connect to the host and port
+	s.connect((HOST, PORT))
+	s.send(query)
+
+	# Handle any socket errors
+	except socket.error as err:
+		print err
+		exit(1)
+
+	except KeyboardInterrupt:
+		s.close()
+		exit(0)
+	
+	s.close()
 
 '''
 #Attempt to send commands
