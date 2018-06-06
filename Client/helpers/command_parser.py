@@ -43,11 +43,11 @@ class CommandParser:
 		#Differentiate between set and get, and set up the initial dictionary
 		if cmds[0] == 'set':
 			leaderCommand = 3
-			parsedCommand = {'cmd': 'set', 'var': cmds[1], 'val': cmds[2], 'id': self.cmdIdSet}
+			parsedCommand = {'cmd': 'set', 'var': cmds[1], 'val': cmds[2], 'id': str(self.cmdIdSet)}
 			self.cmdIdSet += 1
 		elif cmds[0] == 'get':
 			leaderCommand = 2
-			parsedCommand = {'cmd': 'get', 'var': cmds[1], 'id': self.cmdIdGet, 'leader': True}
+			parsedCommand = {'cmd': 'get', 'var': cmds[1], 'id': str(self.cmdIdGet), 'leader': "True"}
 			self.cmdIdGet += 1
 		else:
 			raise ValueError('Improperly formatted command type in text. Must be "get" or "set":\n'+line)
@@ -55,11 +55,11 @@ class CommandParser:
 		#Parse whether command will query the leader node only or not
 		isLeader = True
 		if cmds[leaderCommand] == 't' or cmds[leaderCommand] == 'T' or cmds[leaderCommand] == 'true' or cmds[leaderCommand] == 'True':
-			isLeader = True
-			parsedCommand['leader'] = True
+			isLeader = "True"
+			parsedCommand['leader'] = "True"
 		elif cmds[leaderCommand] == 'f' or cmds[leaderCommand] == 'F' or cmds[leaderCommand] == 'false' or cmds[leaderCommand] == 'False':
-			isLeader = False
-			parsedCommand['leader'] = False
+			isLeader = "False"
+			parsedCommand['leader'] = "False"
 		else: #Confirm if the value is actually false, and not just bad formatting
 			raise ValueError('Improperly formatted boolean value in text:\n'+line)
 		
