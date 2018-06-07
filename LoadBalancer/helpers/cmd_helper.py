@@ -36,7 +36,7 @@ def getIPAddr(request, algorithm):
         s = socket.socket()
         config.log(1,"Received GET request: " + request)
         if req['leader'] == 'True':
-            config.log(2，'sending to leader', config.leader[1]）
+            config.log(2,'sending to leader', config.leader[1]）
             s.connect((config.leader[0], config.leader[1]))
         else:
             index = algorithm.roundRobin()
