@@ -82,16 +82,23 @@ def killNode(request, algorithm):
         config.log(1,"Received kill request: " + request)
         req = json.loads(request)
         type = req['val']
-        index = algorithm.roundRobin()
-        if type != 'any' and type != 'follower':
+
+        if type != 'leader' and type != 'follower':
             return False
         elif type == 'follower':
+            index = algorithm.roundRobin()
             while config.ipList[index][1] == config.leader[1]:
                 index = algorithm.roundRobin()
+            ip = config.ipList[index][0]
+            port = config.ipList[index][1]
+            config.log(2,'Sending KILL message to the '+str(index), config.ipList[index][1])
+        else:
+            ip = config.leader[0]
+            port = config.leader[1]
+            config.log(2,'Sending KILL message to the leader', config.leader[1])
 
         s = socket.socket()
-        config.log(2,'Sending KILL message to the '+str(index), config.ipList[index][1])
-        s.connect((config.ipList[index][0], config.ipList[index][1]))
+        s.connect((ip, port))
         s.send(request+'\n')
         response = s.recv(1024)
         return True
