@@ -26,13 +26,16 @@ class UpdatedMetricEvaluator:
 	
 	def __init__(self, commandList):
 		self.commandList = commandList;
-		#Create empty list for responses, length = # of get queries in commandList
-		self.responseList = [None]*(len([item for item in commandList if item['cmd']=='get']))
+		#Create empty list for responses, length = # of get queries in commandList that match type
+		self.responseListSet = [None]*(len([item for item in commandList if item['cmd']=='set']))
+		self.responseListGet = [None]*(len([item for item in commandList if item['cmd']=='get']))
 		
 		#Calculate expected value for each get query
 		self.expectedValues = []
 		valTable = {}
 		for query in commandList:
+			if 'cmd' not in query or (query['cmd'] != 'set' and query['cmd'] != 'get'):
+				continue
 			if query['cmd'] == 'set':
 				valTable[query['var']]  = query['val']
 			elif query['cmd'] == 'get':
@@ -40,24 +43,33 @@ class UpdatedMetricEvaluator:
 				self.expectedValues.append(myval)
 		
 		#Sanity check to see if # get commands == # matching values in expectedValues
-		if len(self.expectedValues) != len(self.responseList):
+		if len(self.expectedValuesGet) != len(self.responseList):
 			raise Exception('Number of get queries != length of expectedValues list. Error by client')
 	
-	def recordResponse(self, response):
+	def recordResponse(self, response, responseTime):
 		#check if response is valid
+		if 'cmd' not in response or (response['cmd'] != 'set' and response['cmd'] != 'get'):
+			print "ERROR: Invalid response from server! Not a response to a GET or SET query"
+			exit(0)
+			return
+		
+		#Get proper list for response
+		mylist = None
+		if response['cmd'] == 'set':
+			mylist = self.responseListSet
+		else response['cmd'] == 'get':
+			mylist = self.responseListGet
 		
 		#Check if response is correct
-		respId = response['id']
-		respIdInt = int(respId)
-		expectedVal = self.expectedValues[respIdInt]
 		resp = None
 		if response['valid']:
 			resp = response['val']
-		correct = resp == expectedVal
-		self.responseList[respIdInt] = (correct, time.time(), response)
+		correct = resp == mylist[int(response['id'])]
+		mylist[int(response['id'])] = (correct, responseTime, response)
 	
 	def dumpLogs(self):
-		self.calcAccuracy(self.responseList)
+		self.calcAccuracy(self.responseListGet)
+		self.calcAccuracy(self.responseListSet)
 	
 	def calcAccuracy(self, _list):
 		numCorrect = 0

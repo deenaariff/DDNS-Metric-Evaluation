@@ -17,7 +17,7 @@ import sys
 import socket
 import json
 import time
-from helpers.command_parser import CommandParser
+from helpers.command_parser import CommandLoader
 from helpers.metric_evaluation import UpdatedMetricEvaluator
 
 '''
@@ -36,7 +36,7 @@ PORT = 5000
 commandFile = 'cmds.txt'#raw_input('Please input the command file you would like to parse and run:')
 WAIT_TIME = 500.0 #wait time between sends in ms
 
-parser = CommandParser(commandFile)
+parser = CommandLoader(commandFile)
 #commands = parser.concatCommandsIntoJSON()
 metrics = UpdatedMetricEvaluator(parser.getCommandList())
 
@@ -79,13 +79,15 @@ def connectAndSendCommand(query, expectResponse):
 		s.connect((HOST, PORT))
 		print "sending query"
 		s.send(query)
+		sendTime = time.time()
 		print "sent query"
 		if expectResponse:
 			response = s.recv(1024)
+			responseTime = time.time() - sendTime
 			print "response received: "
 			print response
 			if response:
-				metrics.recordResponse(json.loads(response))
+				metrics.recordResponse(json.loads(response), responseTime)
 
 	# Handle any socket errors
 	except socket.error as err:
@@ -103,8 +105,11 @@ def connectAndSendCommand(query, expectResponse):
 
 print "attempting to send commands as json"
 for query in parser.getCommandList():
-	connectAndSendCommand(json.dumps(query), query['cmd']=='get')
-	time.sleep(WAIT_TIME/1000.0)
+	if 'delay' in query:
+		time.sleep(query['delay']/1000.0)
+	else:
+		connectAndSendCommand(json.dumps(query), query['cmd']=='get' or query['cmd']=='set')
+	#time.sleep(WAIT_TIME/1000.0)
 
 metrics.dumpLogs()
 

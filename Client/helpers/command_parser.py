@@ -26,7 +26,11 @@ import json
 class CommandLoader:
 	
 	def __init__(self, _file):
-		
+		with open(_file) as f:
+			self.commandData = json.load(f)
+	
+	def getCommandList(self):
+		return self.commandData
 
 class CommandParser:
 	
