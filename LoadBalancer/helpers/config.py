@@ -9,7 +9,7 @@ def log(m_type,message,ip=None):
     if m_type == 1:
         header = "[1. FROM CLIENT]:"
     elif m_type == 2:
-        header = "[2. TO RAFT ("+ip+")]:"
+        header = "[2. TO RAFT ("+str(ip)+")]:"
     elif m_type == 3:
         header = "[3. FROM RAFT]:"
     elif m_type == 4:
