@@ -12,6 +12,7 @@ def setNewDNS(request):
             s.connect((config.leader[0], config.leader[1]))
             config.log(1,"Received SET request: " + request)
             s.send(request+'\n')
+            config.log(2, request)
             response = s.recv(1024)
 
             if not response:
