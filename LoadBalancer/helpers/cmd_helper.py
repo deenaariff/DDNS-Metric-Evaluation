@@ -83,7 +83,7 @@ def killNode(request, algorithm):
         if type != 'any' and type != 'follower':
             return False
         elif type == 'follower':
-            if config.ipList[index][1] == config.leader[1]:
+            while config.ipList[index][1] == config.leader[1]:
                 index = algorithm.roundRobin()
 
         s = socket.socket()

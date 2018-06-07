@@ -21,7 +21,7 @@ def parsePayload(payload,algorithm):
             result = cmd_helper.addNode(payload)
         elif cmd == 'kill':
             print('kill one of the nodes')
-            result = cmd_helper.killNode(payload)
+            result = cmd_helper.killNode(payload, algorithm)
         else:
             return False
         return result
