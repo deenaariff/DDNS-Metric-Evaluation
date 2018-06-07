@@ -19,6 +19,9 @@ def parsePayload(payload,algorithm):
         elif cmd == 'node':
             print('this is a new node')
             result = cmd_helper.addNode(payload)
+        elif cmd == 'kill':
+            print('kill one of the nodes')
+            result = cmd_helper.killNode(payload)
         else:
             return False
         return result

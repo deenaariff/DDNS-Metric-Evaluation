@@ -5,29 +5,31 @@ import json
 from load_balancer import Algorithm
 
 def setNewDNS(request):
-    if config.leader != None:
-        s = socket.socket()
-        s.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-        s.connect((config.leader[0], config.leader[1]))
-        print('SENDING DNS SET TO RAFT')
-        s.send(request+'\n')
-        response = s.recv(1024)
+    try:
+        if config.leader != None:
+            s = socket.socket()
+            s.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+            s.connect((config.leader[0], config.leader[1]))
+            print('SENDING DNS SET TO RAFT')
+            s.send(request+'\n')
+            response = s.recv(1024)
 
-        if not response:
-            print('there is reponse from cluster for set')
-            return False
+            if not response:
+                print('there is reponse from cluster for set')
+                return False
+            else:
+                print('response for set cmd:',response)
+                print('SEND MESSAGE BACK TO CLIENT')
+                config.client.send(response)
+                return True
         else:
-            print('response for set cmd:',response)
-            #config.client.send(response)
-            #s.close()
-            #config.client.close()
-            return True
-
-    else:
-        print('There is no leader now')
+            print('There is no leader now')
+            return False
+    except Exception as e:
+        print('set new DNS ',e)
         return False
 
-def getIPAddr(request,algorithm):
+def getIPAddr(request, algorithm):
     try:
         response = None
         req = json.loads(request)
@@ -71,6 +73,31 @@ def setNewLeader(request):
     except Exception as e:
         print('set new Leader',e)
         return False
+
+
+def killNode(request, algorithm):
+    try:
+        req = json.loads(request)
+        type = req['val']
+        index = algorithm.roundRobin()
+        if type != 'any' and type != 'follower':
+            return False
+        elif type == 'follower':
+            if config.ipList[index][1] == config.leader[1]:
+                index = algorithm.roundRobin()
+
+        s = socket.socket()
+        print('sending killing message to the '+str(index) +'machine =', config.ipList[index])
+        s.connect((config.ipList[index][0], config.ipList[index][1]))
+        print('SEND KILLING MESSAGE TO RAFT')
+        s.send(request+'\n')
+        response = s.recv(1024)
+        return True
+    except Exception as e:
+        print('killing node ',e)
+        return False
+
+
 
 def addNode(request):
     try:
