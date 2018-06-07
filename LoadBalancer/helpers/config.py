@@ -12,6 +12,6 @@ def log(m_type,message,ip=None):
         header = "[2. TO RAFT ("+ip+")]:"
     elif m_type == 3:
         header = "[3. FROM RAFT]:"
-    elif m_type == 4：
+    elif m_type == 4:
         header = "[4. TO CLIENT]:"
     print header + " " + message
