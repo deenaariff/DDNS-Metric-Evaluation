@@ -27,8 +27,8 @@ class UpdatedMetricEvaluator:
 	def __init__(self, commandList):
 		self.commandList = commandList;
 		#Create empty list for responses, length = # of get queries in commandList that match type
-		self.responseListSet = [None]*(len([item for item in commandList if item['cmd']=='set']))
-		self.responseListGet = [None]*(len([item for item in commandList if item['cmd']=='get']))
+		self.responseListSet = [None]*(len([item for item in commandList if 'cmd' in item and item['cmd']=='set']))
+		self.responseListGet = [None]*(len([item for item in commandList if 'cmd' in item and item['cmd']=='get']))
 		
 		#Calculate expected value for each get query
 		self.expectedValues = []
@@ -43,7 +43,7 @@ class UpdatedMetricEvaluator:
 				self.expectedValues.append(myval)
 		
 		#Sanity check to see if # get commands == # matching values in expectedValues
-		if len(self.expectedValuesGet) != len(self.responseList):
+		if len(self.expectedValues) != len(self.responseListGet):
 			raise Exception('Number of get queries != length of expectedValues list. Error by client')
 	
 	def recordResponse(self, response, responseTime):
@@ -57,14 +57,20 @@ class UpdatedMetricEvaluator:
 		mylist = None
 		if response['cmd'] == 'set':
 			mylist = self.responseListSet
-		else response['cmd'] == 'get':
+		elif response['cmd'] == 'get':
 			mylist = self.responseListGet
 		
 		#Check if response is correct
 		resp = None
 		if response['valid']:
 			resp = response['val']
-		correct = resp == mylist[int(response['id'])]
+			
+		if response['cmd'] == 'get':
+			print 'correctness calc:'
+			print 'resp/expected = ', resp, self.expectedValues[int(response['id'])]
+			correct = resp == self.expectedValues[int(response['id'])]
+		else:
+			correct = response['valid']
 		mylist[int(response['id'])] = (correct, responseTime, response)
 	
 	def dumpLogs(self):
@@ -74,21 +80,23 @@ class UpdatedMetricEvaluator:
 	def calcAccuracy(self, _list):
 		numCorrect = 0
 		numItems = 0
+		sumTime = 0
 		for item in _list:
 			if item == None:
 				continue
 			if item[0] == True:
 				numCorrect += 1
+			sumTime += item[1]
 			numItems += 1
 		if numItems == 0:
 			print "No valid responses back!"
 			return (0, 0)
 		print "Accuracy of immediate responses: "+str(1.0*numCorrect/numItems)
 		print "Number of responses: "+str(numItems)+" vs expected responses: "+str(len(_list))
+		print "Average time per response: "+str(1000.0*sumTime/numItems)
 		print "\n\n"
 		
-		for item in _list:
-			print item
+		
 		
 		return (numCorrect, 1.0*numCorrect/numItems)
 

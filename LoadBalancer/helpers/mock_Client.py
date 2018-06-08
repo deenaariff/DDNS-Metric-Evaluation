@@ -41,11 +41,15 @@ if __name__ == '__main__':
     res = s.recv(1024)
     print('message receive for set:',res)
     s.close()
-    
-    
 
+    dict = {'id':'2','cmd':'kill','val':'any'}
+    data = json.dumps(dict)
+    s = connectSock(HOST,PORT)
+    s.send(data)
+    response = s.recv(1024)
+    s.close()
+    print(response)
     
-
     #for i in range(1,20):
     dict = {'id':'2','cmd':'get','var':'google.com','leader':'True'}
     data = json.dumps(dict)

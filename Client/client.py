@@ -69,6 +69,9 @@ for query in parser.getCommandList():
 s.close()
 '''
 
+#Node Kill Command:
+#{"cmd":"kill", "msgid": "7", "val":"leader", "id":"7"}
+
 def connectAndSendCommand(query, expectResponse):
 	s = socket.socket()
 	try:
@@ -77,12 +80,14 @@ def connectAndSendCommand(query, expectResponse):
 		# Connect to the host and port
 		print "attempting to connect to ", HOST, ":", PORT
 		s.connect((HOST, PORT))
-		print "sending query"
+		print "sending query:"
+		print query
 		s.send(query)
 		sendTime = time.time()
 		print "sent query"
 		if expectResponse:
-			response = s.recv(1024)
+			response = str(s.recv(1024))
+			response = response.decode('utf-8')
 			responseTime = time.time() - sendTime
 			print "response received: "
 			print response
