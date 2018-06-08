@@ -8,7 +8,7 @@ The application consists of application including a multi-node RAFT Distributed 
 
 ## Credit
 
-For our implementation of RAFT-based DNS, we built atop an existing Open-source solution for a Distributed Key-Store implemented using RAFT called Weave. It is available at the following link.
+For our implementation of RAFT-based DNS, we built atop an existing Open-source solution for a Distributed Key-Store implemented using RAFT called Weave. It is available at the following [link](https://github.com/deenaariff/Weave).
 
 Our modificaitons included, fixing various errors in the leader-election conditions that the implementaiton used. Additionally, we added the ability to query data from the cluster using socket communication in both a blocking and non-blocking (java NIO library) fashion. 
 
@@ -21,7 +21,7 @@ To run the experiments we conducted, run the applications in the following order
 
 The Load Balancer Listens for Leader Election Changes. In the root/client directory, we included a start.sh scrip that runs the following command.
 
-`` python client.py 127.0.0.1 5000 ``
+`` python loadbalancer.py ``
 
 This causes the Load Balancer to listen on port 5000 for leadership changes as well as connections from the client that send metric tests through the load balancer. The Load Balancer will perform differently, based upon the information encoded in these messsages. This will be explained later in the documentation. 
 
@@ -73,8 +73,8 @@ On each terminal, pass in each RAFT node the given paramers. The first parameter
 This is an example of running a 3 node RAFT cluster with the above nodes.xml in blocking IO for querying mode. Each command is issued in a seperate terminal window.
 
 ```java -jar Weave.jar 1 1 nodes.xml```
-```java -jar Weave.jar 1 2 nodes.xml```
-```java -jar Weave.jar 1 3 nodes.xml```
+```java -jar Weave.jar 2 1 nodes.xml```
+```java -jar Weave.jar 3 1 nodes.xml```
 
 ### 3) Run the Client and Test Generator
 
