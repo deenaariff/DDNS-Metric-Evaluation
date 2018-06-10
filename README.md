@@ -6,6 +6,17 @@ This Distributed Application evaluates a RAFT-based DNS cluster along the metric
 
 The application consists of application including a multi-node RAFT Distributed DNS Name Server, a Load Balancer capable of performing leader-only querying or general purpose round-robin loadbalancing, and a client application designed to evaluate performance and safety across a variety of scenarios.
 
+## Results
+
+Some of our quantitative results across experiments performed.
+
+<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart.png" alt="alt text" width="250" height="250">
+
+<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart1.png" alt="alt text" width="250" height="250">
+<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart2.png" alt="alt text" width="250" height="250">
+<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart3.png" alt="alt text" width="250" height="250">
+<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart4.png" alt="alt text" width="250" height="250">
+
 ## Credit
 
 For our implementation of RAFT-based DNS, we built atop an existing Open-source solution for a Distributed Key-Store implemented using RAFT called Weave. It is available at the following [link](https://github.com/deenaariff/Weave).
