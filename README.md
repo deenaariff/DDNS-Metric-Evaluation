@@ -10,12 +10,11 @@ The application consists of application including a multi-node RAFT Distributed 
 
 Some of our quantitative results across experiments performed.
 
-<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart.png" alt="alt text" width="250" height="250">
-
-<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart1.png" alt="alt text" width="250" height="250">
-<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart2.png" alt="alt text" width="250" height="250">
-<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart3.png" alt="alt text" width="250" height="250">
-<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart4.png" alt="alt text" width="250" height="250">
+<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart.png" alt="alt text">
+<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart1.png" alt="alt text" >
+<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart2.png" alt="alt text">
+<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart3.png" alt="alt text">
+<img src="https://raw.githubusercontent.com/deenaariff/DDNS-Metric-Evaluation/master/media/chart4.png" alt="alt text">
 
 ## Credit
 
